@@ -2,7 +2,7 @@ import http from 'http';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const PORT = process.env.PORT || 3001
+const PORT =  3001
 
 const server = http.createServer(async(req,res)=>{
     res.write('<h1>Hello, World!</h1>')
