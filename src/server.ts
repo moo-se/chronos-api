@@ -16,8 +16,6 @@ app.use(morgan('dev'))
 app.use(express.json());
 app.use(express.static("static"));
 
-const PORT = process.env.PORT || 9000;
-
 /**
  * Custom Middleware
 const mid = (msg) => (req,res,next)=>{
@@ -27,14 +25,24 @@ const mid = (msg) => (req,res,next)=>{
 app.use(mid('Hi, World!'))
  */
 
+
+app.get('/', (req,res)=>{
+    res.json({message: 'hello'})
+     //res.sendFile(path.resolve("pages/index.html"))
+})
+
 app.use('/api',protect, router)
 app.post('/user', createNewUser)
 app.post('/signin', signin)
 
-app.get('/', (req,res)=>{
-     res.sendFile(path.resolve("pages/index.html"))
+app.use((err, req, res, next)=>{
+    if(err.type === 'auth'){
+        return res.status(401).json({message: 'unauthorized'})
+    } else if(err.type === 'input'){
+        return res.status(400).json({message: 'you messed up'})
+    } else{
+        return res.status(500).json({message: 'opps! that\'s on us'})
+    }
 })
 
-app.listen(PORT, ()=>{
-    console.log(`server is listening on port ${PORT}`)
-} )
+export default app;

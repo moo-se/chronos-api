@@ -68,4 +68,9 @@ body('description').optional().isString(),
 
 router.delete("/updatepoint/:id", (req, res) => {});
 
+router.use((err, req, res, next)=>{
+    console.log(err)
+    res.status(400).json({message: 'input too long'})
+})
+
 export default router;
